@@ -20,7 +20,10 @@ public class Main {
           clientSocket = serverSocket.accept();
             BufferedReader commandReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             System.out.print("============ DEBUGGING CODE =============");
-            System.out.println(commandReader.readLine());
+            while(!serverSocket.isClosed()){
+                System.out.println(commandReader.readLine());
+            }
+
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         } finally {
