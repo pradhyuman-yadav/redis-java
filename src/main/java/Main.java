@@ -19,6 +19,7 @@ public class Main {
           // Wait for connection from client.
           clientSocket = serverSocket.accept();
             BufferedReader commandReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            System.out.print("============ DEBUGGING CODE =============");
             System.out.println(commandReader.readLine());
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
