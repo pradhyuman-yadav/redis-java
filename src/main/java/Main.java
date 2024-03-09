@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -18,13 +19,14 @@ public class Main {
           serverSocket.setReuseAddress(true);
           // Wait for connection from client.
           clientSocket = serverSocket.accept();
-            BufferedReader commandReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            System.out.print("============ DEBUGGING CODE =============");
-            while(!serverSocket.isClosed()){
-                String command = commandReader.readLine();
-                System.out.println("Command = "+command);
-//                if(command.equalsIgnoreCase("PING"))
-            }
+          BufferedReader commandReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+          PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
+          System.out.print("============ DEBUGGING CODE =============");
+          while (!serverSocket.isClosed()) {
+              String command = commandReader.readLine();
+              System.out.println("Command = " + command);
+              if (command.equalsIgnoreCase("PING")) writer.println("+PONG\\r\\n");
+          }
 
         } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
