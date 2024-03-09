@@ -1,59 +1,36 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
+class ClientHandler implements Runnable {
+    private final Socket clientSocket;
+    Parser parser = new Parser();
+    Evaluator eval = new Evaluator();
 
-public class ClientHandler extends Thread {
-    private Socket socket;
-
-    public ClientHandler(Socket socket) {
-        this.socket = socket;
+    public ClientHandler(Socket clientSocket) {
+        this.clientSocket = clientSocket;
     }
-
     @Override
     public void run() {
         try {
-            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
-
-            HashMap<String, String> storage = new HashMap<>();
-
-            String text;
-            while ((text = input.readLine()) != null) {
-              System.out.println("Command = " + text);
-                if (text.equalsIgnoreCase("PING")) output.println("+PONG\r");
-                else if (text.equalsIgnoreCase("ECHO")) {
-                    String nextTextLength;
-                    if ((nextTextLength = input.readLine()) != null && !nextTextLength.equalsIgnoreCase("-1")) {
-                        output.println("+" + input.readLine() + "\r");
-                    }
-                }
-                else if (text.equalsIgnoreCase("set")) {
-                    String nextTextLength;
-                    if ((nextTextLength = input.readLine()) != null && !nextTextLength.equalsIgnoreCase("-1")) {
-                        String setText = input.readLine();
-                        System.out.println(setText);
-                        if((nextTextLength = input.readLine()) != null && !nextTextLength.equalsIgnoreCase("-1")) {
-                            String setData = input.readLine();
-                            System.out.println(setData);
-                            storage.put(setText, setData);
-                            output.println("+OK\r");
-                        }
-                    }
-                }
-                else if (text.equalsIgnoreCase("get")) {
-                    String nextTextLength;
-                    if ((nextTextLength = input.readLine()) != null && !nextTextLength.equalsIgnoreCase("-1")) {
-                        output.println("+" + storage.get(input.readLine()) + "\r");
-                    }
-                }
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(clientSocket.getInputStream()));
+            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+            String queryStart;
+            while ((queryStart = in.readLine()) != null) {
+                parser.parse(in, queryStart);
+                String result = eval.evaluate(parser.getCommand(), parser.getArgs());
+                out.print(result);
+                out.flush();
             }
-
-            socket.close();
-        } catch (Exception e) {
-            System.out.println("Exception in ClientHandler: " + e.getMessage());
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        } finally {
+            try {
+                if (clientSocket != null) {
+                    clientSocket.close();
+                }
+            } catch (IOException e) {
+                System.out.println("IOException: " + e.getMessage());
+            }
         }
     }
 }
