@@ -36,6 +36,7 @@ public class ClientHandler extends Thread {
                         System.out.println(setText);
                         if((nextTextLength = input.readLine()) != null && !nextTextLength.equalsIgnoreCase("-1")) {
                             String setData = input.readLine();
+                            System.out.println(setData);
                             storage.put(setText, setData);
                         }
                     }
