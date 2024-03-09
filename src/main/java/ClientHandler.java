@@ -38,6 +38,7 @@ public class ClientHandler extends Thread {
                             String setData = input.readLine();
                             System.out.println(setData);
                             storage.put(setText, setData);
+                            output.println("+OK\r");
                         }
                     }
                 }
