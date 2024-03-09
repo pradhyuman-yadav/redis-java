@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Main {
-  public static void main(String[] args) {
+  public static void main(String[] args){
     // You can use print statements as follows for debugging, they'll be visible when running tests.
     System.out.println("Logs from your program will appear here!");
 
@@ -20,25 +20,8 @@ public class Main {
             // Wait for connection from client.
             while(true) {
                 clientSocket = serverSocket.accept();
-
-                Socket finalClientSocket = clientSocket;
-                ServerSocket finalServerSocket = serverSocket;
-                new Thread(() -> {
-                    try {
-                        BufferedReader commandReader = new BufferedReader(new InputStreamReader(finalClientSocket.getInputStream()));
-                        PrintWriter writer = new PrintWriter(finalClientSocket.getOutputStream(), true);
-                        System.out.print("============ DEBUGGING CODE =============");
-                        while (!finalServerSocket.isClosed()) {
-                            String command = commandReader.readLine();
-                            System.out.println("Command = " + command);
-                            if (command.equalsIgnoreCase("PING")) writer.println("+PONG\r");
-                        }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-
-
+                System.out.println("New client connected");
+                new ClientHandler(clientSocket).start();
             }
 
         } catch (IOException e) {
