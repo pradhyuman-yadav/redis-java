@@ -24,8 +24,8 @@ public class Main {
           System.out.print("============ DEBUGGING CODE =============");
           while (!serverSocket.isClosed()) {
               String command = commandReader.readLine();
-              System.out.println("Command = " + command);
-              if (command.equalsIgnoreCase("PING")) writer.println("+PONG\r\n");
+//              System.out.println("Command = " + command);
+              if (command.equalsIgnoreCase("PING")) writer.println("PONG");
           }
 
         } catch (IOException e) {
