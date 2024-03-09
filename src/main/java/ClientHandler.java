@@ -18,7 +18,7 @@ public class ClientHandler extends Thread {
 
             String text;
             while ((text = input.readLine()) != null) {
-//              System.out.println("Command = " + command);
+              System.out.println("Command = " + text);
                 if (text.equalsIgnoreCase("PING")) output.println("+PONG\r");
             }
 

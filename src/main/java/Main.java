@@ -20,7 +20,7 @@ public class Main {
             // Wait for connection from client.
             while(true) {
                 clientSocket = serverSocket.accept();
-                System.out.println("New client connected");
+//                System.out.println("New client connected");
                 new ClientHandler(clientSocket).start();
             }
 
