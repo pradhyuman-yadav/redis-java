@@ -23,27 +23,18 @@ public class Main {
 
                 Socket finalClientSocket = clientSocket;
                 ServerSocket finalServerSocket = serverSocket;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            BufferedReader commandReader = new BufferedReader(new InputStreamReader(finalClientSocket.getInputStream()));
-                            PrintWriter writer = new PrintWriter(finalClientSocket.getOutputStream(), true);
-                            System.out.print("============ DEBUGGING CODE =============");
-                            while (!finalServerSocket.isClosed()) {
-                                String command = commandReader.readLine();
-                                System.out.println("Command = " + command);
-                                if (command.equalsIgnoreCase("PING")) writer.println("+PONG\r");
-                            }
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } finally {
-                            try {
-                                finalServerSocket.close();
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
+                new Thread(() -> {
+                    try {
+                        BufferedReader commandReader = new BufferedReader(new InputStreamReader(finalClientSocket.getInputStream()));
+                        PrintWriter writer = new PrintWriter(finalClientSocket.getOutputStream(), true);
+                        System.out.print("============ DEBUGGING CODE =============");
+                        while (!finalServerSocket.isClosed()) {
+                            String command = commandReader.readLine();
+                            System.out.println("Command = " + command);
+                            if (command.equalsIgnoreCase("PING")) writer.println("+PONG\r");
                         }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 });
 
