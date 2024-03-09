@@ -21,7 +21,9 @@ public class Main {
             BufferedReader commandReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             System.out.print("============ DEBUGGING CODE =============");
             while(!serverSocket.isClosed()){
-                System.out.println(commandReader.readLine());
+                String command = commandReader.readLine();
+                System.out.println("Command = "+command);
+//                if(command.equalsIgnoreCase("PING"))
             }
 
         } catch (IOException e) {
