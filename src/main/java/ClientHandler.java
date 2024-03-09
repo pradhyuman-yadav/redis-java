@@ -20,6 +20,7 @@ public class ClientHandler extends Thread {
             while ((text = input.readLine()) != null) {
               System.out.println("Command = " + text);
                 if (text.equalsIgnoreCase("PING")) output.println("+PONG\r");
+                if (text.equalsIgnoreCase("ECHO")) if ((text= input.readLine()) != null) output.println("+"+input.readLine()+"\r");
             }
 
             socket.close();
