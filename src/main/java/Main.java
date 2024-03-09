@@ -25,7 +25,7 @@ public class Main {
           while (!serverSocket.isClosed()) {
               String command = commandReader.readLine();
               System.out.println("Command = " + command);
-              if (command.equalsIgnoreCase("PING")) writer.println("+PONG\\r\\n");
+              if (command.equalsIgnoreCase("PING")) writer.println("+PONG\r\n");
           }
 
         } catch (IOException e) {
